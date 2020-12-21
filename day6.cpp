@@ -6,18 +6,21 @@
 using namespace std;
 
 long yesQuestionsSum(const string &inputFile) {
-    string line; map<char, bool> answers;
-    long yesSum=0;
+    string line; map<char, int> answers;
+    long yesSum=0; int people=0;
     ifstream questionAnswers(inputFile);
     while(getline(questionAnswers, line)) {
-        for (auto letter:line) {
-            answers[letter] = true;
-        }
         if (line.empty()) {
             for (auto key:answers) {
-                if (key.second) yesSum++;
-                answers[key.first] = false;
+                if (key.second == people) yesSum++;
+                answers[key.first] = 0;
             }
+            people=0;
+        } else {
+            for (auto letter:line) {
+                answers[letter]+=1;
+            }
+            people++;
         }
     }
     return yesSum;
