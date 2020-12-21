@@ -46,8 +46,8 @@ int productForTriplet(const string& filename, int target=2020) {
     return 0;
 }
 
-int main() {
-    string inputFile = "../inputFiles/day1.txt";
+int main(int argc, char** argv) {
+    string inputFile = argv[1];
     cout << productForPair(inputFile) << endl;
     cout << productForTriplet(inputFile) << endl;
 }

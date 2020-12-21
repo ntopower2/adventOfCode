@@ -42,8 +42,8 @@ int validPasswords2(char* filename) {
     return valid;
 }
 
-int main() {
-    char inputFile[] ="../inputFiles/day2.txt";
+int main(int argc, char** argv) {
+    char* inputFile = argv[1];
     cout << validPasswords(inputFile) << endl;
     cout << validPasswords2(inputFile) << endl;
 }
