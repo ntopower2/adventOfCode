@@ -2,7 +2,6 @@
 #include <iostream>
 #include <fstream>
 #include <map>
-#include <cstring>
 
 using namespace std;
 int countTrees(const string& filename, int right=3, int down=1) {
@@ -14,7 +13,7 @@ int countTrees(const string& filename, int right=3, int down=1) {
     period = line.length();
     while (getline(gridFile, line)) {
         i++;
-        if (!(i%down) && line[(i*right)%period] == '#') trees++;
+        if (!(i%down) && line[(((int)i/down)*right)%period] == '#') trees++;
     }
     return trees;
 }
@@ -22,4 +21,11 @@ int countTrees(const string& filename, int right=3, int down=1) {
 int main(int argc, char** argv) {
     string inputFile = argv[1];
     cout << countTrees(inputFile) << endl;
+    long long total = 1;
+    total *= countTrees(inputFile, 1, 1);
+    total *= countTrees(inputFile);
+    total *= countTrees(inputFile, 5, 1);
+    total *= countTrees(inputFile, 7, 1);
+    total *= countTrees(inputFile, 1, 2);
+    cout << total << endl;
 }
