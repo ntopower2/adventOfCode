@@ -18,8 +18,8 @@ vector<string> split(const string& s, char delimiter) {
     return tokens;
 }
 
-long bagCount(map<string, vector<pair<string, int>>> &adj,
-              const string& startBag = "shinygold") {
+long bagIncludedCount(map<string, vector<pair<string, int>>> &adj,
+                      const string& startBag = "shinygold") {
     // counts bags that contain startBag with BFS search
     list<string> queue; long bags=0;
     adj[startBag].push_back(make_pair("-1",-1));
@@ -46,16 +46,33 @@ map<string, vector<pair<string, int>>> createBagGraph(const string &inputFile) {
         for (int i=0;i<(spaceSplit.size()-4)/4 && spaceSplit.size()>7;i++) {
             string bag2 = spaceSplit[5 + 4*i].append(spaceSplit[6 + 4*i]);
             int bagNum = stoi(spaceSplit[4*(i+1)]);
-            adj[bag2].push_back(make_pair(bag1, bagNum));
+//            adj[bag2].push_back(make_pair(bag1, bagNum));
+            adj[bag1].push_back(make_pair(bag2, bagNum));
         }
     }
     return adj;
+}
+
+long bagsInsideCount(map<string, vector<pair<string, int>>> &adj,
+                map<string, long> &bagCount,
+                const string& bag = "shinygold") {
+    // counts total bags inside bag
+    if (adj[bag].empty()) bagCount[bag]=1;
+    if (bagCount[bag]) return bagCount[bag];
+    else {
+        bagCount[bag] = 1;
+        for (const auto& bagInside:adj[bag])
+            bagCount[bag] += bagInside.second * bagsInsideCount(adj, bagCount, bagInside.first);
+        return bagCount[bag];
+    }
 }
 
 int main(int argc, char **argv) {
     (void) argc;
     string inputFile = argv[1];
     auto bagGraph = createBagGraph(inputFile);
-    cout << bagCount(bagGraph) << endl;
+    map<string, long> bagCount;
+//    cout << bagIncludedCount(bagGraph) << endl;
+    cout << bagsInsideCount(bagGraph, bagCount)-1 << endl;
 }
 
